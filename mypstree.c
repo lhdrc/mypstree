@@ -144,6 +144,16 @@ void getProcessInfo()
 // Forward declaration of printTree
 void printTree(Treenode* node, int level);
 
+void printPid()
+{
+    for(int i = 0; i <= max_pid; i++)
+    {
+        if(process[i])
+        {
+            printf("PID: %d, PPID: %d, Name: %s\n", process[i]->pid, process[i]->ppid, process[i]->name);
+        }
+    }
+}
 void printTreeroot(int level)
 {
     for(int i = 0; i <= max_pid; i++)
@@ -203,8 +213,32 @@ void freeProcessTree()
     free(process);
 }
 
-int main()
+int main(int argc,char* argv[])
 {
+    if(argc > 1)
+    {
+        char option = argv[1][1];
+        switch(option)
+        {
+            case 'v':
+               printf("Version 1.0\n");
+                return 0;
+            case 'p':
+                getProcessInfo();
+                printPid();
+                freeProcessTree();
+                return 0;
+            case 'h':
+                printf("Usage: mypstree [option]\n");
+                printf("Options:\n");
+                printf("  -v : Show version\n");
+                printf("  -p : Show process information\n");
+                printf("  -h : Show help\n");
+                return 0;
+            default:
+                break;
+        }
+    }
     getProcessInfo();
     printTreeroot(0);
     freeProcessTree();
